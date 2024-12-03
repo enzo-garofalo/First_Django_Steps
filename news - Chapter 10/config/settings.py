@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd Party
+    'crispy_forms', # new
+    'crispy_bootstrap5',  # suporte específico para Bootstrap 5
+
     'accounts',
     'pages'
 ]
@@ -124,6 +129,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Configurando para qual template a aplicação vai redirecionar se o login ou logout for bem sucedido
 LOGIN_REDIRECT_URL = 'home'

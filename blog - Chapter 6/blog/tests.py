@@ -105,8 +105,8 @@ class BlogTests(TestCase):
         })
 
         self.assertEqual(res.status_code, 302)
-        self.assertEqual(Post.ojects.last().title, 'New title')
-        self.assertEqual(Post.ojects.last().body, 'New text')
+        self.assertEqual(Post.objects.last().title, 'New title')
+        self.assertEqual(Post.objects.last().body, 'New Text')
     
     def test_post_update_view(self):
         res = self.client.post(reverse('post_edit', args='1'), {
