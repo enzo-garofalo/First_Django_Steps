@@ -1,0 +1,5 @@
+#Pressoes de SeS ao longo do tempo
+#                                                 Fluido SEM Cascalho                           |                             Fluido COM Cascalho                           |
+#       tempo (s)    | Surge Sapata   |    Surge Fundo    |    Swab Sapata   |    Swab Fundo    |   Surge Sapata   |   Surge Fundo    |   Swab Sapata    |    Swab Fundo    
+          0.0000          2325.7525          5673.8500          2323.4972          1107.3924          3247.4832          6587.0913          3245.2279          2020.6337
+         60.0000          2325.7525          5673.8500          2323.4972          1107.3924          3247.4832          6587.0913          3245.2279          2020.6337

@@ -1,0 +1,20 @@
+/* Estilo para garantir que o footer fique no final */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1; /* Ocupa o espaço restante da página */
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
