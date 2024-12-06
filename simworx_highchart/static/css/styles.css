@@ -18,3 +18,34 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+.group-header {
+    border-right: 1px solid #000; /* Borda à direita de cada grupo */
+}
+.group-header:last-child {
+    border-right: none; /* Remover borda do último grupo */
+}
+/* Torna os cabeçalhos fixos ao rolar */
+.group-header, thead tr:nth-child(2) th {
+    position: sticky;
+    top: 0; /* Alinha no topo da página */
+    z-index: 2; /* Garante que os cabeçalhos fiquem acima de outros elementos */
+    background-color: #f8f9fa; /* Fundo para destacar */
+}
+
+/* Ajuste para o cabeçalho agrupado */
+.group-header {
+    top: 0; /* Primeiro nível fixo no topo */
+    z-index: 3; /* Sobrepõe o cabeçalho principal */
+}
+
+/* Adiciona uma borda para visibilidade */
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Margem extra para evitar sobreposição visual */
+.container {
+    padding-top: 80px; /* Compensa a altura do cabeçalho sticky, caso haja um navbar ou similar */
+}
