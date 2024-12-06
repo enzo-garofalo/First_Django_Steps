@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Pressão por Profundidade{% endblock %}
+
+{% block content %}
+    <figure class="highcharts-figure">
+    <div id="chart"></div>
+    <p class="highcharts-description">
+      Basic line chart showing trends in a dataset.
+      This chart shows up the <strong>relationship</strong> between <strong>vertical deepth and preassure. </strong>
+    </p>
+    </figure>
+    <div class="container mt-4">
+        <table class="table table-striped-columns table-hover table-bordered">
+            <thead class="group-header">
+                <!-- Cabeçalho de grupos -->
+                <tr>
+                    {% for group in table_groups %}
+                        <th colspan="{{ group.span }}" class="text-center">{{ group.title }}</th>
+                    {% endfor %}
+                </tr>
+                <!-- Cabeçalho principal -->
+                <tr>
+                    {% for column in columns %}
+                        <th class="text-center">{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_data %}
+                    <tr>
+                        {% for value in row.values %}
+                            <td class="text-right">{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        Highcharts.chart('chart', {
+
+            title: {
+                text: 'TVD por Pressão',
+                align: 'left'
+            },
+
+            subtitle: {
+                text: 'By SIMWORX',
+                align: 'left'
+            },
+
+            // Eixo Y para a profundidade vertical
+            yAxis: {
+                title: {
+                    text: 'Profundidade Vertical [m]'
+                },
+                reversed: false
+            },
+
+            // Eixo X para a pressão hidrostática
+            xAxis: {
+                title: {
+                    text: 'Pressão Hidrostática [Pa]'
+                }
+            },
+
+            // Configuração da legenda
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+
+            // Dados da série - Cada ponto (x, y) corresponderá a um valor de pressão e profundidade
+            series: [{
+                name: 'profundidade por pressão',
+                data: 
+                    {{ tvdXp_data | safe}}
+            
+            }],
+
+            series: [{
+                name: 'profundidade por efeito cascalho',
+                data:
+                    {{ tvdXc_data | safe }}
+            }]
+
+        });
+    </script>
+
+{% endblock %}
