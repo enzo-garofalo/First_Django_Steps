@@ -3,12 +3,23 @@
 {% block title %}Pressão por Profundidade{% endblock %}
 
 {% block content %}
+
+    {% comment %} Chart tvd, pressao e cascalho {% endcomment %}
     <figure class="highcharts-figure">
-    <div id="chart"></div>
-    <p class="highcharts-description">
-      Basic line chart showing trends in a dataset.
-      This chart shows up the <strong>relationship</strong> between <strong>vertical deepth and preassure. </strong>
-    </p>
+        <div id="chart-TVD-PRESSAO-CASCALHO"></div>
+        <p class="highcharts-description">
+            Basic line chart showing trends in a dataset.
+            This chart shows up the <strong>relationship</strong> between <strong>vertical deepth and preassure.</strong>
+        </p>
+    </figure>
+
+    {% comment %} Chart com cascalho sem cascalho {% endcomment %}
+    <figure class="highcharts-figure">
+        <div id="chart-COM-SEM-CASCALHO"></div>
+        <p class="highcharts-description">
+            Basic line chart showing trends in a dataset.
+            This chart shows up the <strong>relationship</strong> between <strong>vertical deepth and preassure.</strong>
+        </p>
     </figure>
     <div class="container mt-4">
         <table class="table table-striped-columns table-hover table-bordered">
@@ -39,56 +50,180 @@
     </div>
     
     <script>
-        Highcharts.chart('chart', {
-
+        Highcharts.setOptions({
+            chart: {
+                backgroundColor: '#f4f4f4',
+                borderRadius: 5
+            },
             title: {
-                text: 'TVD por Pressão',
+                style: {
+                    color: '#333',
+                    fontSize: '20px'
+                }
+            }
+        });
+    
+        Highcharts.chart('chart-TVD-PRESSAO-CASCALHO', {
+            title: {
+                text: 'TVD, Pressão hidráulica e Efeito Cascalho',
                 align: 'left'
             },
-
             subtitle: {
                 text: 'By SIMWORX',
                 align: 'left'
             },
-
-            // Eixo Y para a profundidade vertical
-            yAxis: {
-                title: {
-                    text: 'Profundidade Vertical [m]'
-                },
-                reversed: false
-            },
-
-            // Eixo X para a pressão hidrostática
             xAxis: {
                 title: {
                     text: 'Pressão Hidrostática [Pa]'
-                }
+                },
+                tickInterval: 100 // Define que os ticks do eixo X aparecem a cada 1000 unidades
             },
-
-            // Configuração da legenda
+            yAxis: [
+            {
+                // Eixo Y à esquerda
+                title: {
+                    text: 'Profundidade Vertical [m]'
+                },
+                reversed: false,
+                tickInterval: 1000,
+                opposite: false // Garantir que fique à esquerda
+            },
+            {
+                // Eixo Y à direita
+                title: {
+                    text: 'Efeito Cascalho'
+                },
+                opposite: true, // Posicionar no lado direito
+                tickInterval: 1000,
+                labels: {
+                    style: {
+                        color: '#d35400' // Cor personalizada
+                    }
+                }
+            }
+            ],
             legend: {
                 layout: 'vertical',
                 align: 'right',
                 verticalAlign: 'middle'
             },
-
-
-            // Dados da série - Cada ponto (x, y) corresponderá a um valor de pressão e profundidade
-            series: [{
-                name: 'profundidade por pressão',
-                data: 
-                    {{ tvdXp_data | safe}}
-            
-            }],
-
-            series: [{
-                name: 'profundidade por efeito cascalho',
-                data:
-                    {{ tvdXc_data | safe }}
-            }]
-
+            tooltip: {
+                formatter: function() {
+                    return `<b>${this.series.name}</b><br>
+                            Pressão: ${this.x} Pa<br>
+                            Profundidade: ${this.y} m`;
+                }
+            },
+            series: [
+            {
+                name: 'TVD e Pressão',
+                data: {{ tvdXp_data | safe }},
+                yAxis: 0, // Associar ao eixo da esquerda
+                color: '#1f78b4',
+                dashStyle: 'DashDot'
+            },
+            {
+                name: 'Efeito Cascalho p/ pressào e TVD',
+                data: {{ tvdXc_data | safe }},
+                yAxis: 1, // Associar ao eixo da direita
+                color: '#d35400',
+                dashStyle: 'DashDot'
+            }
+        ]
         });
     </script>
 
-{% endblock %}
+    <script>
+        const chart = Highcharts.chart('chart-COM-SEM-CASCALHO', {
+
+            chart: {
+                type: 'column'
+            },
+        
+            title: {
+                text: 'Comparação com cascalho e sem cascalho'
+            },
+        
+            subtitle: {
+                text: 'Comparação com a média de cada coluna'
+            },
+        
+            legend: {
+                align: 'right',
+                verticalAlign: 'middle',
+                layout: 'vertical'
+            },
+        
+            xAxis: {
+                categories: ['Com cascalho', 'Sem Cascalho'],
+                labels: {
+                    x: -10
+                }
+            },
+        
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Amount'
+                }
+            },
+        
+            series: [{
+                name: 'MAX. SURGE',
+                data: {{ chart_data.max_surge|safe }}  // Valores para MAX. SURGE
+            }, {
+                name: 'SURGE',
+                data: {{ chart_data.surge|safe }}      // Valores para SURGE
+            }, {
+                name: 'MIN. SWAB',
+                data: {{ chart_data.min_swab|safe }}   // Valores para MIN. SWAB
+            }, {
+                name: 'SWAB',
+                data: {{ chart_data.swab|safe }}       // Valores para SWAB
+            }],
+        
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal'
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: null
+                            }
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: false
+                        }
+                    }
+                }]
+            }
+        });
+        
+        document.getElementById('small').addEventListener('click', function () {
+            chart.setSize(400);
+        });
+        
+        document.getElementById('large').addEventListener('click', function () {
+            chart.setSize(600);
+        });
+        
+        document.getElementById('auto').addEventListener('click', function () {
+            chart.setSize(null);
+        });
+    </script>
+{% endblock content %}

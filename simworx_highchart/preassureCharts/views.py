@@ -31,13 +31,45 @@ class PxProfundidadeView(TemplateView):
         # Criando a lista tvdXp_data
         tvdXp_data = []
         tvdXc_data = []
+        
+        # Criando listas para as séries
+        total_max_surge_com = 0
+        total_max_surge_sem = 0
+
+        total_surge_com = 0
+        total_surge_sem = 0
+
+        total_min_swab_com = 0
+        total_min_swab_sem = 0
+ 
+        total_swab_com = 0
+        total_swab_sem = 0
+   
         for row in data:
             # Criando um par de valores: [Pressão, Profundidade]
             tvdXp_data.append([row['Vertical'], row['Hidrostatica']])
             tvdXc_data.append([row['Vertical'], row['Cascalhos']])
+            # Criando pares de valores, com cascalho e sem cascalho
+            total_max_surge_com += row['Max. Surge (Com Cascalho)']
+            total_max_surge_sem += row['Max. Surge (Sem Cascalho)']
+
+            total_surge_com += row['SURGE (Com Cascalho)']
+            total_surge_sem += row['SURGE (Sem Cascalho)']
+
+            total_min_swab_com += row['Min. Swab (Com Cascalho)']
+            total_min_swab_sem += row['Min. Swab (Sem Cascalho)']
+
+            total_swab_com += row['SWAB (Com Cascalho)']
+            total_swab_sem += row['SWAB (Sem Cascalho)']
         
         context['tvdXp_data'] = tvdXp_data
         context['tvdXc_data'] = tvdXc_data
+        context['chart_data'] = {
+            'max_surge': [total_max_surge_com//len(data), total_max_surge_sem//len(data)],
+            'surge': [total_surge_com//len(data), total_surge_sem//len(data)],
+            'min_swab': [total_min_swab_com//len(data), total_min_swab_sem//len(data)],
+            'swab': [total_swab_com//len(data), total_swab_sem//len(data)],
+        }
 
         return context
 
@@ -78,3 +110,85 @@ class PxProfundidadeView(TemplateView):
     
 class PxTempoView(TemplateView):
     template_name = 'pCharts/pXtempo.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Configurando cabeçalho
+        context['table_titles'] = [
+            {'title' : '', 'span' : 1},
+            {'title' : 'Fluido SEM cascalho', 'span' : 4},
+            {'title' : 'Fluido COM cascalho', 'span' : 4}
+        ]
+        # Configurando titulo das colunas
+        context['columns'] = [
+            'Tempo [S]',
+            'Surge Sapata', 'Surge Fundo', 'Swab Sapata', 'Swab Fundo',
+            'Surge Sapata', 'Surge Fundo', 'Swab Sapata', 'Swab Fundo'
+        ]
+
+            
+        # Parseando dados
+
+        data = self.parse_txt('preassureCharts\data\Pxtempo.txt')
+        context['table_data'] = data
+        
+        # Configurando chart
+        surge_sapata_sem = []
+        surge_fundo_sem  = []
+        swab_sapata_sem  = []
+        swab_fundo_sem   = []
+
+        surge_sapata_com = []
+        surge_fundo_com = []
+        swab_sapata_com = []
+        swab_fundo_com = []
+
+        for row in data:
+            surge_sapata_sem.append([row['tempo'], row['surge sapata sem cascalho']]),
+            surge_fundo_sem.append([row['tempo'], row['surge fundo sem cascalho']]),
+            swab_sapata_sem.append([row['tempo'], row['swab sapata sem cascalho']])
+            swab_fundo_sem.append([row['tempo'], row['swab fundo sem cascalho']])
+  
+            surge_sapata_com.append([row['tempo'], row['surge sapata com cascalho']]),
+            surge_fundo_com.append([row['tempo'], row['surge fundo com cascalho']]),
+            swab_sapata_com.append([row['tempo'], row['swab sapata com cascalho']])
+            swab_fundo_com.append([row['tempo'], row['swab fundo com cascalho']])
+        
+        context['surge_sapata_sem'] = surge_sapata_sem
+        context['surge_fundo_sem'] = surge_fundo_sem
+        context['swab_sapata_sem'] = swab_sapata_sem
+        context['swab_fundo_sem'] = swab_fundo_sem 
+        
+        context['surge_sapata_com'] = surge_sapata_com
+        context['surge_fundo_com'] = surge_fundo_com
+        context['swab_sapata_com'] = swab_sapata_com
+        context['swab_fundo_com'] = swab_fundo_com 
+
+        return context
+
+    @staticmethod
+    def parse_txt(file_path):
+
+        data = []
+
+        with open(file_path, 'r') as file:
+            for line in file:
+                if re.match(r'\s*#|\s$', line):
+                    continue
+
+                columns = re.split(r'\s{2,}', line.strip())
+                data.append({
+                    'tempo': float(columns[0]),
+
+                    'surge sapata sem cascalho' : float(columns[1]), 
+                    'surge fundo sem cascalho' : float(columns[2]), 
+                    'swab sapata sem cascalho' : float(columns[3]), 
+                    'swab fundo sem cascalho' : float(columns[4]),
+
+                    'surge sapata com cascalho' : float(columns[5]), 
+                    'surge fundo com cascalho' : float(columns[6]), 
+                    'swab sapata com cascalho' : float(columns[7]), 
+                    'swab fundo com cascalho' : float(columns[8])
+                })
+
+        return data
