@@ -1,0 +1,23 @@
+# Use uma imagem base do Python
+FROM python:3.12
+
+# Instale pacotes necessários (PostgreSQL client)
+RUN apt-get update && apt-get install -y \
+    libpq-dev gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure o diretório de trabalho
+WORKDIR /code
+
+# Copie o requirements.txt
+COPY requirements.txt requirements.txt
+
+# Instale as dependências do projeto
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Copie o código do projeto
+COPY . .
+
+# Comando para rodar o servidor Django
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
