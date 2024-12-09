@@ -113,14 +113,8 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Configurando como mandar emails
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# DEFAULT_FROM_EMAIL = 'enzosendgrid@gmail.com'
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'apikey'
-# EMAIL_HOST_PASSWORD = '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'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
 
 
 
