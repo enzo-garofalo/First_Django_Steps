@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Pressão por Tempo{% endblock %}
+
+{% block content %}
+    <figure class="highcharts-figure">
+        <div id="chart-pressaoXtempo"></div>
+        <p class="highcharts-description">
+            Mostrar como os valores de Surge e Swab (tanto na sapata quanto no fundo) evoluem ao longo do tempo.
+        </p>
+    </figure>
+
+    <div class="container mt-4">
+        <table class="table table-striped-columns table-hover table-bordered">
+            <caption>Pressoes de SeS ao longo do tempo</caption>
+            <thead class="group-header">
+                
+            
+                <tr>
+                    {% for title in table_titles %}
+                        <th colspan="{{ title.span }}" class="text-center">{{ title.title }}</th>
+                    {% endfor %}
+                </tr>
+
+                <tr>
+                    {% for columns in columns %}
+                        <th class="text-center">{{ columns }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_data %}
+                    <tr>
+                        {% for value in row.values %}
+                            <td class="text-right">{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        Highcharts.setOptions({
+            chart: {
+                backgroundColor: '#f4f4f4',
+                borderRadius: 5
+            },
+            title: {
+                style: {
+                    color: '#333',
+                    fontSize: '20px'
+                }
+            }
+        });
+        Highcharts.chart('chart-pressaoXtempo', {
+
+            title: {
+                text: 'Pressões ao Longo do Tempo',
+                align: 'left'
+            },
+
+            subtitle: {
+                text: 'By SIMWORX',
+                align: 'left'
+            },
+
+            yAxis: {
+                title: {
+                    text: 'VALORES DE PRESSÃO'
+                }
+            },
+
+            xAxis: {
+                title:{
+                    text: 'TEMPO [S]'
+                }
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+    
+            tooltip: {
+                formatter: function() {
+                    return `<b>${this.series.name}</b><br>
+                            Tempo: ${this.x} s<br>
+                            Pressão: ${this.y}`;
+                }
+            },
+
+            series: [{
+                name: 'Surge Sapata (SEM Cascalho)',
+                data: {{ surge_sapata_sem | safe }}
+            }, 
+            {
+                name: 'Surge Fundo (SEM Cascalho)',
+                data: {{ surge_fundo_sem | safe }}
+            }, 
+            {
+                name: 'Swab Sapata (SEM Cascalho)',
+                data: {{ swab_sapata_sem | safe }}
+            }, 
+            {
+                name: 'Swab Fundo (SEM Cascalho)',
+                data: {{ swab_fundo_sem| safe }}
+            },  
+            {
+                name: 'Surge Sapata (COM Cascalho)',
+                data: {{ surge_sapata_com | safe }}
+            }, 
+            {
+                name: 'Surge Fundo (COM Cascalho)',
+                data: {{ surge_sapata_com | safe }}
+            }, 
+            {
+                name: 'Swab Sapata (COM Cascalho)',
+                data: {{ swab_sapata_com | safe }}
+            }, 
+            {
+                name: 'Swab Fundo (COM Cascalho)',
+                data: {{ swab_fundo_com | safe }}
+            }
+            
+            ],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+
+    </script>
+{% endblock %}

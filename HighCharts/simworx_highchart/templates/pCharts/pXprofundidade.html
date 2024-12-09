@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block title %}Pressão por Profundidade{% endblock %}
+
+{% block content %}
+
+    {% comment %} Chart tvd, pressao e cascalho {% endcomment %}
+    <figure class="highcharts-figure">
+        <div id="chart-TVD-PRESSAO-CASCALHO"></div>
+        <p class="highcharts-description">
+            Basic line chart showing trends in a dataset.
+            This chart shows up the <strong>relationship</strong> between <strong>vertical deepth and preassure.</strong>
+        </p>
+    </figure>
+
+    {% comment %} Chart com cascalho sem cascalho {% endcomment %}
+    <figure class="highcharts-figure">
+        <div id="chart-COM-SEM-CASCALHO"></div>
+        <p class="highcharts-description">
+            Basic line chart showing trends in a dataset.
+            This chart shows up the <strong>relationship</strong> between <strong>vertical deepth and preassure.</strong>
+        </p>
+    </figure>
+    <div class="container mt-4">
+        <table class="table table-striped-columns table-hover table-bordered">
+            <thead class="group-header">
+                <!-- Cabeçalho de grupos -->
+                <tr>
+                    {% for group in table_groups %}
+                        <th colspan="{{ group.span }}" class="text-center">{{ group.title }}</th>
+                    {% endfor %}
+                </tr>
+                <!-- Cabeçalho principal -->
+                <tr>
+                    {% for column in columns %}
+                        <th class="text-center">{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_data %}
+                    <tr>
+                        {% for value in row.values %}
+                            <td class="text-right">{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        Highcharts.setOptions({
+            chart: {
+                backgroundColor: '#f4f4f4',
+                borderRadius: 5
+            },
+            title: {
+                style: {
+                    color: '#333',
+                    fontSize: '20px'
+                }
+            }
+        });
+    
+        Highcharts.chart('chart-TVD-PRESSAO-CASCALHO', {
+            title: {
+                text: 'TVD, Pressão hidráulica e Efeito Cascalho',
+                align: 'left'
+            },
+            subtitle: {
+                text: 'By SIMWORX',
+                align: 'left'
+            },
+            xAxis: {
+                title: {
+                    text: 'Pressão Hidrostática [Pa]'
+                },
+                tickInterval: 100, // Define que os ticks do eixo X aparecem a cada 1000 unidades
+                opposite: true // Garantir que fique à esquerda
+            },
+            yAxis: [
+            {
+                // Eixo Y à esquerda
+                title: {
+                    text: 'Profundidade Vertical [m]'
+                },
+                reversed: true,
+                tickInterval: 1000,
+                
+            } }
+            
+            ],
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            tooltip: {
+                formatter: function() {
+                    return `<b>${this.series.name}</b><br>
+                            Pressão: ${this.x} Pa<br>
+                            Profundidade: ${this.y} m`;
+                }
+            },
+            series: [
+            {
+                name: 'TVD e Pressão',
+                data: {{ tvdXp_data | safe }},
+                yAxis: 0, // Associar ao eixo da esquerda
+                color: '#1f78b4',
+                dashStyle: 'DashDot'
+            },
+            {
+                name: 'Efeito Cascalho p/ pressào e TVD',
+                data: {{ tvdXc_data | safe }},
+                yAxis: 1, // Associar ao eixo da direita
+                color: '#d35400',
+                dashStyle: 'DashDot'
+            }
+        ]
+        });
+    </script>
+
+    <script>
+        const chart = Highcharts.chart('chart-COM-SEM-CASCALHO', {
+
+            chart: {
+                type: 'column'
+            },
+        
+            title: {
+                text: 'Comparação com cascalho e sem cascalho'
+            },
+        
+            subtitle: {
+                text: 'Comparação com a média de cada coluna'
+            },
+        
+            legend: {
+                align: 'right',
+                verticalAlign: 'middle',
+                layout: 'vertical'
+            },
+        
+            xAxis: {
+                categories: ['Com cascalho', 'Sem Cascalho'],
+                labels: {
+                    x: -10
+                }
+            },
+        
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Amount'
+                }
+            },
+        
+            series: [{
+                name: 'MAX. SURGE',
+                data: {{ chart_data.max_surge|safe }}  // Valores para MAX. SURGE
+            }, {
+                name: 'SURGE',
+                data: {{ chart_data.surge|safe }}      // Valores para SURGE
+            }, {
+                name: 'MIN. SWAB',
+                data: {{ chart_data.min_swab|safe }}   // Valores para MIN. SWAB
+            }, {
+                name: 'SWAB',
+                data: {{ chart_data.swab|safe }}       // Valores para SWAB
+            }],
+        
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal'
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: null
+                            }
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: false
+                        }
+                    }
+                }]
+            }
+        });
+        
+        document.getElementById('small').addEventListener('click', function () {
+            chart.setSize(400);
+        });
+        
+        document.getElementById('large').addEventListener('click', function () {
+            chart.setSize(600);
+        });
+        
+        document.getElementById('auto').addEventListener('click', function () {
+            chart.setSize(null);
+        });
+    </script>
+{% endblock content %}

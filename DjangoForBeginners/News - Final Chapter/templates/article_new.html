@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1 class="my-4">New article</h1>
+    <form action="" method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Title</label>
+            {{ form.title }}
+            {% for error in form.title.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            <label for="id_body" class="form-label">Body</label>
+            {{ form.body }}
+            {% for error in form.body.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'article_list' %}" class="btn btn-primary ml-2">Cancel</a>
+        <button class="btn btn-success ml-2" type="submit">Save</button>
+    </form>
+</div>
+{% endblock content %}

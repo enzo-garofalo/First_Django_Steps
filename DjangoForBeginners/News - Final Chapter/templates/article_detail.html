@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">{{ object.title }}</h2>
+            <p class="card-subtitle mb-2 text-muted">
+                Por <strong>{{ object.author }}</strong> | {{ object.date|date:"d M Y" }}
+            </p>
+            <hr>
+            <p class="card-text">{{ object.body }}</p>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'article_edit' object.pk %}" class="btn btn-primary me-2">Editar</a>
+            <a href="{% url 'article_delete' object.pk %}" class="btn btn-danger me-2">Deletar</a>
+            <a href="{% url 'article_list' %}" class="btn btn-secondary">Todos os Artigos</a>
+            <a href="{% url 'article_list' %}" class="btn btn-se">Todos os Artigos</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

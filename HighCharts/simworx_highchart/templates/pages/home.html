@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<br/>
+<div class="jumbotron">
+    <h1 class="display-4">SIMCHARTS</h1>
+    <p class="lead">Learning to build charts and to call kernels, this website was built with Django.</p>
+    <p class="lead">
+    <a class="btn btn-primary btn-lg" href="{% url 'PxProfundidade' %}"
+    role="button">View PxProfundidade</a>
+    <a class="btn btn-primary btn-lg" href="{% url 'PxTempo' %}"
+    role="button">View PxTempo</a>
+    </p>
+</div>
+{% endblock content %}
