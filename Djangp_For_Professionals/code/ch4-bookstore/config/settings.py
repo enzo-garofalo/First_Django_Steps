@@ -40,7 +40,6 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
-    #poderia colocar apenas pages, qual a diferença?
 ]
 
 MIDDLEWARE = [
