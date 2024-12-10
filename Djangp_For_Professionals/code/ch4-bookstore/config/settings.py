@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django me deu
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Terceirizados
+    'crispy_forms',
+    'crispy_bootstrap5',
+
+    # Eu criei!
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
 ]
@@ -122,7 +128,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+#  Define a URL base onde os arquivos estáticos serão acessíveis no navegador
+
+STATICFILES_DIRS = [BASE_DIR/ 'static']
+# Especifica os diretórios adicionais onde o Django deve procurar arquivos estáticos durante o desenvolvimento.
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Define o diretório onde os arquivos estáticos serão coletados quando você rodar o comando collectstatic.
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+# Define o sistema de armazenamento que o Django deve usar para arquivos estáticos.
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = "bootstrap5"  
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -131,3 +150,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Permitindo user customizado
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Manipulando para onde o user vai se efetuar com sucesso o login e o logout
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
