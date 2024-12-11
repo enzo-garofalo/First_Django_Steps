@@ -4,11 +4,14 @@ from django.urls import path, include
 urlpatterns = [
     # Django admin
     path('admin/', admin.site.urls),
+
     # User managemenn (ler rodapé!)
     # path('accounts/', include('django.contrib.auth.urls')),
     # Path para efetuar login
     path("accounts/", include('allauth.urls')),
-    # Path da home
+
+    # Eu criei
+    path('books/', include('books.urls')),
     path('', include('pages.urls'))
 ]
 
