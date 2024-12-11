@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # Django me deu
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -69,11 +70,13 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email" 
 ACCOUNT_EMAIL_REQUIRED = True 
 ACCOUNT_UNIQUE_EMAIL = True 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # Manipulando para onde o user vai se efetuar com sucesso o login e o logout
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
