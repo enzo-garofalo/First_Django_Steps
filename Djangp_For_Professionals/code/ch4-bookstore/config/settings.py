@@ -39,14 +39,36 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Terceirizados
+    # Terceirizados para customização
     'crispy_forms',
     'crispy_bootstrap5',
+    # Para autenticação
+    'allauth',
+    'allauth.account',
 
     # Eu criei!
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
 ]
+# DJANGO-ALLAUTH CONFIG
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Backend padrão do Django
+    'allauth.account.auth_backends.AuthenticationBackend',  # Backend do allauth
+]
+
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_USERNAME_REQUIRED = False 
+ACCOUNT_AUTHENTICATION_METHOD = "email" 
+ACCOUNT_EMAIL_REQUIRED = True 
+ACCOUNT_UNIQUE_EMAIL = True 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Manipulando para onde o user vai se efetuar com sucesso o login e o logout
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,6 +78,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # allauth config
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -151,6 +175,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Permitindo user customizado
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# Manipulando para onde o user vai se efetuar com sucesso o login e o logout
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'

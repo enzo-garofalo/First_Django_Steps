@@ -5,9 +5,9 @@ urlpatterns = [
     # Django admin
     path('admin/', admin.site.urls),
     # User managemenn (ler rodapé!)
-    path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
     # Path para efetuar login
-    path("accounts/", include('accounts.urls')),
+    path("accounts/", include('allauth.urls')),
     # Path da home
     path('', include('pages.urls'))
 ]
