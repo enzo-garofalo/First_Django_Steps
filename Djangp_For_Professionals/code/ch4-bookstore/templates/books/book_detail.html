@@ -1,9 +1,36 @@
 {% extends "_base.html" %}
 {% block title %}{{ book.title }}{% endblock title %}
 {% block content %}
-    <div class="book-detail">
-        <h2><a href="">{{ book.title }}</a></h2>
-        <p>Author: {{ book.author }}</p>
-        <p>Price: {{ book.price }}</p>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <!-- Título do Livro -->
+            <h2 class="card-title text-primary">
+                <a href="#" class="text-decoration-none">{{ book.title }}</a>
+            </h2>
+            
+            <!-- Detalhes do Autor e Preço -->
+            <p class="card-text">
+                <strong>Author:</strong> {{ book.author }}<br>
+                <strong>Price:</strong> ${{ book.price }}
+            </p>
+            
+            <!-- Seção de Reviews -->
+            <div class="mt-4">
+                <h3 class="h5 text-secondary">Reviews</h3>
+                <ul class="list-group list-group-flush">
+                    {% for review in book.reviews.all %}
+                        <li class="list-group-item">
+                            <p class="mb-1">{{ review.review }}</p>
+                            <small class="text-muted">— {{ review.author }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No reviews yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
+</div>
+
 {% endblock content %}

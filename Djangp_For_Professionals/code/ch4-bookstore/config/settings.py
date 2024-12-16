@@ -71,7 +71,9 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email" 
 ACCOUNT_EMAIL_REQUIRED = True 
 ACCOUNT_UNIQUE_EMAIL = True 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# Backend de e-mail para desenvolvimento
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Manipulando para onde o user vai se efetuar com sucesso o login e o logout
 LOGIN_REDIRECT_URL = 'home'
