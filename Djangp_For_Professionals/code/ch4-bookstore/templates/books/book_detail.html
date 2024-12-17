@@ -1,36 +1,44 @@
 {% extends "_base.html" %}
+{% load static %}
+
 {% block title %}{{ book.title }}{% endblock title %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="card shadow-sm">
-        <div class="card-body">
-            <!-- Título do Livro -->
-            <h2 class="card-title text-primary">
-                <a href="#" class="text-decoration-none">{{ book.title }}</a>
-            </h2>
-            
-            <!-- Detalhes do Autor e Preço -->
-            <p class="card-text">
-                <strong>Author:</strong> {{ book.author }}<br>
-                <strong>Price:</strong> ${{ book.price }}
-            </p>
-            
-            <!-- Seção de Reviews -->
-            <div class="mt-4">
-                <h3 class="h5 text-secondary">Reviews</h3>
-                <ul class="list-group list-group-flush">
-                    {% for review in book.reviews.all %}
-                        <li class="list-group-item">
-                            <p class="mb-1">{{ review.review }}</p>
-                            <small class="text-muted">— {{ review.author }}</small>
-                        </li>
-                    {% empty %}
-                        <li class="list-group-item text-muted">No reviews yet.</li>
-                    {% endfor %}
-                </ul>
+        <div class="row g-0">
+            <!-- Imagem do livro -->
+            <div class="col-md-4">
+                {% if book.cover %}
+                    <img src="{{ book.cover.url }}" class="img-fluid rounded-start" alt="{{ book.title }}">
+                {% else %}
+                    <img src="{% static 'images/default_cover.png' %}" class="img-fluid rounded-start" alt="{{ book.title }}">
+                {% endif %}
             </div>
+            <!-- Detalhes do livro -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h2 class="card-title mb-3">
+                        <a href="#" class="text-decoration-none text-primary">{{ book.title }}</a>
+                    </h2>
+                    <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                    <p class="card-text"><strong>Price:</strong> {{ book.price }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Seção de Reviews -->
+        <div class="card-footer bg-light">
+            <h3 class="h5 mb-3">Reviews</h3>
+            <ul class="list-group list-group-flush">
+                {% for review in book.reviews.all %}
+                <li class="list-group-item">
+                    <strong>{{ review.author }}:</strong> {{ review.review }}
+                </li>
+                {% empty %}
+                <li class="list-group-item text-muted">No reviews yet.</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>
-
 {% endblock content %}
