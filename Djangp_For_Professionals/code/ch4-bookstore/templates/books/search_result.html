@@ -1,0 +1,48 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Search{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center">Search Results for '{{ query }}':</h1>
+
+    {% if books_list %}
+    <div class="row g-4">
+        {% for book in books_list %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="row g-0">
+                    <!-- Book Cover -->
+                    <div class="col-4">
+                        {% if book.cover %}
+                        <img src="{{ book.cover.url }}" class="img-fluid rounded-start h-100" alt="{{ book.title }}">
+                        {% else %}
+                        <img src="{% static 'images/default_cover.png' %}" class="img-fluid rounded-start h-100" alt="{{ book.title }}">
+                        {% endif %}
+                    </div>
+                    <!-- Book Details -->
+                    <div class="col-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ book.get_absolute_url }}" class="text-decoration-none">{{ book.title }}</a>
+                            </h5>
+                            <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                            <p class="card-text"><strong>Price:</strong> ${{ book.price }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="{{ book.get_absolute_url }}" class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center my-4">
+        <h3>No results found for '{{ query }}'.</h3>
+        <p>Try a different search term.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
