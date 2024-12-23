@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     # Para autenticação
     'allauth',
     'allauth.account',
+    # Para performance
+    'debug_toolbar',
 
     # Eu criei!
     'accounts.apps.AccountsConfig',
@@ -91,6 +93,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # allauth config
     'allauth.account.middleware.AccountMiddleware',
+    # debug toolbar
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -181,3 +185,9 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT =  BASE_DIR / 'media'
+
+# django-debug-toolbar
+import socket
+
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
